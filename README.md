@@ -97,6 +97,15 @@ The project is built with a **state-driven navigation architecture**, ensuring s
 
 ---
 
+## 💻 Running Locally
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
 ## 📸 Previews
 
 > _(Screenshots & videos will be added soon)_
