@@ -1,6 +1,6 @@
 <div align="center">
   <!-- LOGO -->
-  <img src="./public/logo/galaxy-explorer-logo-1-rb-w.png" alt="3D Milky Way Explorer Logo" width="160" />
+  <img src="./public/logo/galaxy-explorer-logo-1-rb-w.webp" alt="3D Milky Way Explorer Logo" width="160" />
 
   <h1>3D Milky Way Explorer</h1>
 
