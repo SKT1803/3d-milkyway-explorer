@@ -6,9 +6,10 @@
 
   <p>
     An interactive 3D journey through the Milky Way galaxy — explore star systems,
-    dive into planetary systems, and navigate celestial bodies in real time.
+    dive into planetary systems, and navigate celestial bodies in real time. 
   </p>
 
+ 
   <!-- BADGES -->
 <p>
   <img src="https://img.shields.io/badge/Cosmic%203D%20Exploration-0F172A?style=for-the-badge&logo=starship&logoColor=A855F7" />
@@ -27,6 +28,7 @@
 
 
 ---
+
 
 ## 🌌 About the Project
 
