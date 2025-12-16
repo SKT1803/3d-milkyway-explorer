@@ -108,11 +108,148 @@ npm run dev
 
 ## 📸 Previews
 
-> _(Screenshots & videos will be added soon)_
+<table>
+  <tr>
+    <td align="center">
+      <img src="./images/1.webp" width="480" alt="Milky Way - overview" />
+      <br />
+      <sub>Milky Way — Galaxy overview</sub>
+    </td>
+    <td align="center">
+      <img src="./images/2.webp" width="480" alt="Milky Way - navigation" />
+      <br />
+      <sub>Sirius System — Inner system view</sub>
+    </td>
+  </tr>
 
-```txt
-- Galaxy overview
-- Solar System exploration
-- Sirius binary system
-- Alpha Centauri triple system
-- Planet & moon focus views
+  <tr>
+    <td align="center">
+      <img src="./images/3.webp" width="480" alt="Warp transition" />
+      <br />
+      <sub>Sirius A — Focus view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/4.webp" width="480" alt="Inner space - entry" />
+      <br />
+      <sub>Sirius B — Focus view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/5.webp" width="480" alt="Sun system overview" />
+      <br />
+      <sub>Alpha Centauri — Inner system view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/6.webp" width="480" alt="Solar system - orbits" />
+      <br />
+      <sub>Rigil Kentaurus (Alpha Centauri A) — Focus view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/7.webp" width="480" alt="Planet focus view" />
+      <br />
+      <sub>Proxima Centauri — Focus view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/8.webp" width="480" alt="Moon system view" />
+      <br />
+      <sub>Solar System — Sun distant view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/9.webp" width="480" alt="Asteroid belt view" />
+      <br />
+      <sub>Mercury — Planet focus view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/10.webp" width="480" alt="Kuiper belt view" />
+      <br />
+      <sub>Venus — Planet focus view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/11.webp" width="480" alt="Sirius system overview" />
+      <br />
+      <sub>Earth — Planet focus view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/12.webp" width="480" alt="Sirius inner view" />
+      <br />
+      <sub>Mars — Planet focus view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/13.webp" width="480" alt="Sirius A focus" />
+      <br />
+      <sub>Jupiter — Planet focus view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/14.webp" width="480" alt="Sirius B focus" />
+      <br />
+      <sub>Saturn — Planet focus view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/15.webp" width="480" alt="Alpha Centauri system overview" />
+      <br />
+      <sub>Uranus — Planet focus view</sub>
+    </td>
+    <td align="center">
+      <img src="./images/16.webp" width="480" alt="Alpha Centauri inner view" />
+      <br />
+      <sub>Neptune — Planet focus view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/17.webp" width="480" alt="Alpha Centauri A focus" />
+      <br />
+      <sub>Pluto — Dwarf planet focus</sub>
+    </td>
+    <td align="center">
+      <img src="./images/18.webp" width="480" alt="Alpha Centauri B focus" />
+      <br />
+      <sub>Haumea — Dwarf planet focus</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/19.webp" width="480" alt="Proxima Centauri focus" />
+      <br />
+      <sub>Makemake — Dwarf planet focus</sub>
+    </td>
+    <td align="center">
+      <img src="./images/20.webp" width="480" alt="UI info panel navigation" />
+      <br />
+      <sub>Eris — Dwarf planet focus</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/21.webp" width="480" alt="Labels and scaling" />
+      <br />
+      <sub>Asteroid Belt — Inner belt focus</sub>
+    </td>
+    <td align="center">
+      <img src="./images/22.webp" width="480" alt="Final overview" />
+      <br />
+      <sub>Kuiper Belt — Outer belt focus</sub>
+    </td>
+  </tr>
+</table>
+
