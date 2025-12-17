@@ -28,7 +28,7 @@
   <!-- LIVE DEMO -->
   <p>
     🌐 <b>Live Demo:</b>
-    <a href="https://YOUR-VERCEL-LINK.vercel.app" target="_blank">
+    <a href="[https://YOUR-VERCEL-LINK.vercel.app](https://3d-milkyway-explorer.vercel.app/)" target="_blank">
       Try it on Vercel
     </a>
   </p>
