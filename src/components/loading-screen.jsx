@@ -3,7 +3,7 @@ export function LoadingScreen() {
     <div className="fixed inset-0 bg-black flex items-center justify-center z-50">
       <div className="text-center px-6">
         <img
-          src="/logo.png"
+          src="/logo.webp"
           alt="Logo"
           className="w-44 h-44 md:w-56 md:h-56 mx-auto mb-8 select-none pointer-events-none"
           draggable={false}
