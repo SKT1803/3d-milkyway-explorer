@@ -9,12 +9,14 @@ import {
 } from "react";
 import * as THREE from "three";
 
+import { LoadingScreen } from "./components/loading-screen";
+
 import { MilkyWay } from "./components/milky-way";
 import { CameraControls } from "./components/camera-controls";
 import { InnerSpace } from "./components/inner-space";
 import { GalaxyShell } from "./components/galaxy-shell";
 import { SunSpace } from "./components/sun-space";
-import { SunPortal } from "./components/sun-portal";
+import { Portal } from "./components/portal";
 import { SiriusPortal } from "./components/sirius-portal";
 import { AlphaCentauriPortal } from "./components/alpha-centauri-portal";
 import { SpaceInfoPanel } from "./components/space-info-panel";
@@ -53,6 +55,8 @@ export default function App() {
     insideColor: "#ff6030",
     outsideColor: "#1b3984",
   });
+
+  const [isMilkyWayReady, setIsMilkyWayReady] = useState(false);
 
   const [mode, setMode] = useState(MODE.GALAXY);
   const [focus, setFocus] = useState(FOCUS.MILKY_WAY);
@@ -414,7 +418,7 @@ export default function App() {
 
   return (
     <div className="w-full h-screen bg-black relative">
-      {/* Info Panel */}
+      {!isMilkyWayReady && <LoadingScreen />}
       <SpaceInfoPanel
         mode={mode}
         focus={focus}
@@ -465,7 +469,6 @@ export default function App() {
 
           <Environment preset="night" />
 
-          {/* İç yıldız alanı – hem Güneş hem diğer yıldız sistemleri için ortak */}
           <InnerSpace
             visible={true}
             maxRadius={1600}
@@ -480,7 +483,12 @@ export default function App() {
             visible={showGalaxy}
           />
 
-          <MilkyWay {...galaxyParams} visible={showGalaxy} />
+          <MilkyWay
+            {...galaxyParams}
+            visible={showGalaxy}
+            onReady={() => setIsMilkyWayReady(true)}
+            defer
+          />
 
           {showGalaxy && !showGalaxyRegions && (
             <Html
@@ -504,7 +512,7 @@ export default function App() {
             !isBackAnimating &&
             showGalaxyRegions && (
               <>
-                <SunPortal
+                <Portal
                   label="Solar System"
                   position={[-2, 0.15, 0.9]} // x, y, z
                   onClick={enterSunByClick}
