@@ -16,7 +16,7 @@ import { CameraControls } from "./components/camera-controls";
 import { InnerSpace } from "./components/inner-space";
 import { GalaxyShell } from "./components/galaxy-shell";
 import { SunSpace } from "./components/sun-space";
-import { Portal } from "./components/portal";
+import { SunPortal } from "./components/sun-portal";
 import { SiriusPortal } from "./components/sirius-portal";
 import { AlphaCentauriPortal } from "./components/alpha-centauri-portal";
 import { SpaceInfoPanel } from "./components/space-info-panel";
@@ -512,7 +512,7 @@ export default function App() {
             !isBackAnimating &&
             showGalaxyRegions && (
               <>
-                <Portal
+                <SunPortal
                   label="Solar System"
                   position={[-2, 0.15, 0.9]} // x, y, z
                   onClick={enterSunByClick}
