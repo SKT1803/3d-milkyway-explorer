@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Html } from "@react-three/drei";
 import { MilkyWay } from "./milky-way";
 
-export function SunPortal({ label, position /*, onClick */ }) {
+export function SunPortal({ label, position }) {
   const ref = useRef();
 
   return (
@@ -33,7 +33,6 @@ export function SunPortal({ label, position /*, onClick */ }) {
         </mesh>
       </group>
 
-      {/* LABEL */}
       <Html
         position={[0, 0.7, 0]}
         center

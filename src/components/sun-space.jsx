@@ -3,7 +3,6 @@ import { useFrame } from "@react-three/fiber";
 import { SolarSystem } from "./solar-system";
 
 export function SunSpace({
-  visible = true,
   position = [0, 0, 0],
   exitProgressRef,
   onPlanetLabelClick,
@@ -12,27 +11,23 @@ export function SunSpace({
 }) {
   const groupRef = useRef(null);
 
-  useFrame((_, delta) => {
+  useFrame(() => {
     if (!groupRef.current) return;
 
     const exitProgress = exitProgressRef?.current ?? 0;
 
     const s = Math.max(0.001, 1 - exitProgress);
-    const actuallyVisible = visible && exitProgress < 0.9;
-
-    groupRef.current.visible = actuallyVisible;
     groupRef.current.scale.set(s, s, s);
+    groupRef.current.visible = exitProgress < 0.9;
   });
 
   return (
     <group ref={groupRef} position={position}>
       <SolarSystem
-        showLabels={visible}
+        showLabels={true}
         onPlanetLabelClick={onPlanetLabelClick}
         focusedPlanetName={focusedPlanetName}
-        onRegisterPlanetFocusApi={
-          visible ? onRegisterPlanetFocusApi : undefined
-        }
+        onRegisterPlanetFocusApi={onRegisterPlanetFocusApi}
       />
     </group>
   );

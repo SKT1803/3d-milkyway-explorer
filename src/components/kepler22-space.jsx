@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { SiriusSystem } from "./sirius-system";
+import { Kepler22System } from "./kepler22-system";
 
-export function SiriusSpace({
+export function Kepler22Space({
   position = [0, 0, 0],
   exitProgressRef,
   onPlanetLabelClick,
@@ -13,24 +13,20 @@ export function SiriusSpace({
 
   useFrame(() => {
     if (!groupRef.current) return;
-
-    const exitProgress = exitProgressRef?.current ?? 0;
-    const s = Math.max(0.001, 1 - exitProgress);
-
+    const p = exitProgressRef?.current ?? 0;
+    const s = Math.max(0.001, 1 - p);
     groupRef.current.scale.set(s, s, s);
-    groupRef.current.visible = exitProgress < 0.9;
+    groupRef.current.visible = p < 0.9;
   });
 
   return (
     <group ref={groupRef} position={position}>
-      <SiriusSystem
+      <Kepler22System
         showLabels={true}
-        onPlanetLabelClick={onPlanetLabelClick}
         focusedPlanetName={focusedPlanetName}
+        onPlanetLabelClick={onPlanetLabelClick}
         onRegisterPlanetFocusApi={onRegisterPlanetFocusApi}
       />
     </group>
   );
 }
-
-export default SiriusSpace;

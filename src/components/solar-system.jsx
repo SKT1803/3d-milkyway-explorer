@@ -13,6 +13,9 @@ import { HaumeaSystem } from "./celestials/haumea-system";
 import { MakemakeSystem } from "./celestials/makemake-system";
 import { ErisSystem } from "./celestials/eris-system";
 import { AsteroidBelt } from "./celestials/asteroid-belt";
+import { CeresSystem } from "./celestials/ceres-system";
+
+import CustomModels from "./models/custom-models";
 
 export function SolarSystem({
   showLabels = true,
@@ -65,27 +68,21 @@ export function SolarSystem({
   const erisGroupRef = useRef(null);
   const erisRef = useRef(null);
 
-  // Asteroid / Kuiper kuşağı için görünmez focus noktaları
+  const ceresGroupRef = useRef(null);
+  const ceresRef = useRef(null);
   const asteroidBeltFocusRef = useRef(null);
   const kuiperBeltFocusRef = useRef(null);
-
-  // Mars uyduları
   const phobosRef = useRef(null);
   const deimosRef = useRef(null);
-
-  // Jüpiter uyduları için ref'ler
   const ioRef = useRef(null);
   const europaRef = useRef(null);
   const ganymedeRef = useRef(null);
   const callistoRef = useRef(null);
-
   const amaltheaRef = useRef(null);
   const thebeRef = useRef(null);
   const himaliaRef = useRef(null);
   const pasiphaeRef = useRef(null);
   const elaraRef = useRef(null);
-
-  // Saturn uyduları için ref'ler
   const titanRef = useRef(null);
   const dioneRef = useRef(null);
   const enceladusRef = useRef(null);
@@ -93,17 +90,17 @@ export function SolarSystem({
   const mimasRef = useRef(null);
   const rheaRef = useRef(null);
   const tethysRef = useRef(null);
-
-  // Uranus uyduları için ref'ler
   const mirandaRef = useRef(null);
   const arielRef = useRef(null);
   const umbrielRef = useRef(null);
   const titaniaRef = useRef(null);
   const oberonRef = useRef(null);
-
-  // Neptune uyduları için ref'ler
   const proteusRef = useRef(null);
   const tritonRef = useRef(null);
+  const voyagerRef = useRef(null);
+  const issOrbitRef = useRef(null);
+  const newHorizonsRef = useRef(null);
+  const hubbleOrbitRef = useRef(null);
 
   const { camera } = useThree();
   const [labelScale, setLabelScale] = useState(1);
@@ -124,10 +121,9 @@ export function SolarSystem({
     "/textures/planets/neptune.jpg",
     "/textures/planets/pluto.jpg",
     "/textures/planets/haumea.jpg",
-
     "/textures/planets/makemake.jpg",
     "/textures/planets/eris.jpg",
-
+    "/textures/planets/ceres.jpg",
     // Jüpiter uyduları
     "/textures/jupiter-moons/elara.jpg",
     "/textures/jupiter-moons/europa.jpg",
@@ -138,7 +134,6 @@ export function SolarSystem({
     "/textures/jupiter-moons/himalia.jpg",
     "/textures/jupiter-moons/pasiphae.jpg",
     "/textures/jupiter-moons/thebe.jpg",
-
     // Saturn uyduları
     "/textures/saturn-moons/Dione.jpeg",
     "/textures/saturn-moons/Enceladus.jpeg",
@@ -148,11 +143,9 @@ export function SolarSystem({
     "/textures/saturn-moons/Tethys.jpeg",
     "/textures/saturn-moons/TitanClouds.jpg",
     "/textures/saturn-moons/TitanSurface.jpeg",
-
     // Mars moons
     "/textures/mars-moons/phobos.jpg",
     "/textures/mars-moons/deimos.jpg",
-
     // Uranus moons
     "/textures/uranus-moons/miranda.jpg",
     "/textures/uranus-moons/ariel.jpg",
@@ -163,8 +156,6 @@ export function SolarSystem({
     // Neptune moons
     "/textures/neptune-moons/proteus.jpg",
     "/textures/neptune-moons/triton.jpg",
-
-    // Asteroid belt için tek bir kaya dokusu
     "/textures/asteroids/asteroid_diffuse.jpg",
   ]);
 
@@ -186,6 +177,7 @@ export function SolarSystem({
     haumeaTex,
     makemakeTex,
     erisTex,
+    ceresTex,
     elaraTex,
     europaTex,
     ioTex,
@@ -228,7 +220,7 @@ export function SolarSystem({
       const t = THREE.MathUtils.clamp(
         (maxDist - d) / (maxDist - minDist),
         0,
-        1
+        1,
       );
 
       const targetScale = 0.8 + t * 1.2;
@@ -257,7 +249,10 @@ export function SolarSystem({
 
     if (earthGroupRef.current) {
       const earthSystemFocused =
-        focusedPlanetName === "Earth" || focusedPlanetName === "Moon";
+        focusedPlanetName === "Earth" ||
+        focusedPlanetName === "Moon" ||
+        focusedPlanetName === "ISS" ||
+        focusedPlanetName === "Hubble";
       const speed = earthSystemFocused ? 0 : 0.18;
       earthGroupRef.current.rotation.y += speed * delta;
     }
@@ -269,6 +264,11 @@ export function SolarSystem({
         focusedPlanetName === "Deimos";
       const speed = marsSystemFocused ? 0 : 0.15;
       marsGroupRef.current.rotation.y += speed * delta;
+    }
+
+    if (ceresGroupRef.current) {
+      const speed = focusedPlanetName === "Ceres" ? 0 : 0.12;
+      ceresGroupRef.current.rotation.y += speed * delta;
     }
 
     if (jupiterGroupRef.current) {
@@ -320,7 +320,7 @@ export function SolarSystem({
 
     if (neptuneGroupRef.current) {
       const neptuneSystemFocused = ["Neptune", "Proteus", "Triton"].includes(
-        focusedPlanetName
+        focusedPlanetName,
       );
       const speed = neptuneSystemFocused ? 0 : 0.03;
       neptuneGroupRef.current.rotation.y += speed * delta;
@@ -351,7 +351,8 @@ export function SolarSystem({
     }
 
     // KENDİ EKSENİ ROTASYONLARI
-    if (sunRef.current) sunGroupRef.current.rotation.y += 0.075 * delta;
+    // if (sunRef.current) sunGroupRef.current.rotation.y += 0.075 * delta;
+    if (sunRef.current) sunRef.current.rotation.y += 0.075 * delta;
 
     if (mercuryRef.current) mercuryRef.current.rotation.y += 0.35 * delta;
     if (venusRef.current) venusRef.current.rotation.y += -0.35 * delta;
@@ -364,9 +365,8 @@ export function SolarSystem({
     if (moonRef.current) {
       moonRef.current.rotation.y += 0.25 * delta;
     }
-
     if (marsRef.current) marsRef.current.rotation.y += 0.475 * delta;
-
+    if (ceresRef.current) ceresRef.current.rotation.y += 0.4 * delta;
     if (jupiterRef.current) jupiterRef.current.rotation.y += 1.0 * delta;
     if (saturnRef.current) saturnRef.current.rotation.y += 0.9 * delta;
     if (saturnRingRef.current) saturnRingRef.current.rotation.z += 0.25 * delta;
@@ -396,11 +396,11 @@ export function SolarSystem({
 
   const orbitR = (au) => ORBIT_OFFSET + AU_SCALE * au;
 
-  // Gerçek AU değerleri
   const AU_MERCURY = 0.39;
   const AU_VENUS = 0.72;
   const AU_EARTH = 1.0;
   const AU_MARS = 1.52;
+  const AU_CERES = 2.77;
   const AU_JUPITER = 5.2;
   const AU_SATURN = 9.54;
   const AU_URANUS = 19.2;
@@ -415,16 +415,15 @@ export function SolarSystem({
   const mercuryRadius = earthRadius * 0.38;
   const venusRadius = earthRadius * 0.95;
   const marsRadius = earthRadius * 0.53;
-
   const jupiterRadius = earthRadius * 11.2;
   const saturnRadius = earthRadius * 9.45;
   const uranusRadius = earthRadius * 4.0;
   const neptuneRadius = earthRadius * 3.9;
-
   const plutoRadius = earthRadius * 0.18 * DWARF_VISUAL_MULT;
   const haumeaRadius = earthRadius * 0.16 * DWARF_VISUAL_MULT;
   const makemakeRadius = earthRadius * 0.17 * DWARF_VISUAL_MULT;
   const erisRadius = earthRadius * 0.19 * DWARF_VISUAL_MULT;
+  const ceresRadius = earthRadius * 0.15 * DWARF_VISUAL_MULT;
 
   const moonRadius = earthRadius * 0.27;
 
@@ -453,14 +452,14 @@ export function SolarSystem({
   const titanRadius = saturnRadius * 0.35;
   const iapetusRadius = saturnRadius * 0.24;
 
-  // Uranus uyduları (boyut, sıkıştırılmış ölçek)
+  // Uranus uyduları (boyut)
   const mirandaRadius = uranusRadius * 0.16;
   const arielRadius = uranusRadius * 0.18;
   const umbrielRadius = uranusRadius * 0.2;
   const titaniaRadius = uranusRadius * 0.24;
   const oberonRadius = uranusRadius * 0.22;
 
-  // Neptune uyduları (boyut – görsel olarak güzel dursun)
+  // Neptune uyduları (boyut)
   const proteusRadius = neptuneRadius * 0.18;
   const tritonRadius = neptuneRadius * 0.28;
 
@@ -480,6 +479,7 @@ export function SolarSystem({
   const haumeaOrbitRadius = orbitR(AU_HAUMEA);
   const makemakeOrbitRadius = orbitR(AU_MAKEMAKE);
   const erisOrbitRadius = orbitR(AU_ERIS);
+  const ceresOrbitRadius = orbitR(AU_CERES);
 
   // Dünya sistemi
   const moonOrbitRadius = earthRadius * 6.5;
@@ -580,6 +580,9 @@ export function SolarSystem({
       case "Eris":
         return { ref: erisRef, radius: erisRadius };
 
+      case "Ceres":
+        return { ref: ceresRef, radius: ceresRadius };
+
       // Jupiter moons
       case "Europa":
         return { ref: europaRef, radius: europaRadius };
@@ -634,12 +637,24 @@ export function SolarSystem({
       case "Triton":
         return { ref: tritonRef, radius: tritonRadius };
 
-      // Asteroid Belt (görünmez focus noktası)
       case "Asteroid Belt":
         return { ref: asteroidBeltFocusRef, radius: asteroidBeltCameraRadius };
 
       case "Kuiper Belt":
         return { ref: kuiperBeltFocusRef, radius: kuiperBeltCameraRadius };
+
+      // 3d models
+      case "Voyager 1":
+        return { ref: voyagerRef, radius: 1.5 };
+
+      case "ISS":
+        return { ref: issOrbitRef, radius: 0.05 };
+
+      case "New Horizons":
+        return { ref: newHorizonsRef, radius: 1.3 };
+
+      case "Hubble":
+        return { ref: hubbleOrbitRef, radius: 0.05 };
 
       default:
         return null;
@@ -658,17 +673,15 @@ export function SolarSystem({
 
       onPlanetLabelClick(name, [wp.x, wp.y, wp.z], data.radius);
     },
-    [onPlanetLabelClick]
+    [onPlanetLabelClick],
   );
 
-  // API’yi App’e register et (UI butonları buradan geliyor)
   useEffect(() => {
     if (onRegisterPlanetFocusApi) {
       onRegisterPlanetFocusApi(focusPlanetByName);
     }
   }, [onRegisterPlanetFocusApi, focusPlanetByName]);
 
-  // Label click → planets için SolarSystem pipeline
   const handleLabelClick = (e, name) => {
     e.stopPropagation();
     focusPlanetByName(name);
@@ -1152,7 +1165,7 @@ export function SolarSystem({
         </mesh>
       </group>
 
-      {/* EARTH SYSTEM (Earth + Moon, Moon orbit 5° tiltli) */}
+      {/* EARTH SYSTEM (Earth + Moon) */}
       <EarthSystem
         groupRef={earthGroupRef}
         earthRef={earthRef}
@@ -1170,7 +1183,21 @@ export function SolarSystem({
         showLabels={showLabels}
         focusedPlanetName={focusedPlanetName}
         onPlanetLabelClick={onPlanetLabelClick}
-      />
+      >
+        <CustomModels
+          focusedName={focusedPlanetName}
+          labelScale={labelScale}
+          onFocusRequest={(name) => focusPlanetByName(name)}
+          anchors={{ Earth: true }} // sadece Earth orbit
+          renderFree={false} // free tekrar çizilmesin
+          modelRefs={{
+            "Voyager 1": voyagerRef,
+            "New Horizons": newHorizonsRef,
+            ISS: issOrbitRef,
+            Hubble: hubbleOrbitRef,
+          }}
+        />
+      </EarthSystem>
 
       {/* MARS SYSTEM (Mars + Phobos + Deimos) */}
       <MarsSystem
@@ -1184,6 +1211,21 @@ export function SolarSystem({
         showLabels={showLabels}
         focusedPlanetName={focusedPlanetName}
         moons={marsMoons}
+        onPlanetLabelClick={onPlanetLabelClick}
+      />
+
+      {/* CERES SYSTEM (dwarf planet in asteroid belt, tilted orbit) */}
+      <CeresSystem
+        groupRef={ceresGroupRef}
+        planetRef={ceresRef}
+        ceresRadius={ceresRadius}
+        ceresOrbitRadius={ceresOrbitRadius}
+        ceresTex={ceresTex}
+        labelScale={labelScale}
+        showLabelCeres={showLabelFor("Ceres")}
+        showLabels={showLabels}
+        focusedPlanetName={focusedPlanetName}
+        orbitTiltDeg={10.6}
         onPlanetLabelClick={onPlanetLabelClick}
       />
 
@@ -1307,6 +1349,19 @@ export function SolarSystem({
         focusedPlanetName={focusedPlanetName}
         orbitTiltDeg={44}
         onPlanetLabelClick={onPlanetLabelClick}
+      />
+
+      <CustomModels
+        focusedName={focusedPlanetName}
+        labelScale={labelScale}
+        onFocusRequest={(name) => focusPlanetByName(name)}
+        anchors={{}} // root'ta orbite gerek yok
+        modelRefs={{
+          "Voyager 1": voyagerRef,
+          "New Horizons": newHorizonsRef,
+          ISS: issOrbitRef,
+          Hubble: hubbleOrbitRef,
+        }}
       />
     </group>
   );

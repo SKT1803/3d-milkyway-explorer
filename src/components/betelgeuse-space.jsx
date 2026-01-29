@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { SiriusSystem } from "./sirius-system";
+import { BetelgeuseSystem } from "./betelgeuse-system";
 
-export function SiriusSpace({
+export function BetelgeuseSpace({
   position = [0, 0, 0],
   exitProgressRef,
   onPlanetLabelClick,
@@ -23,7 +23,7 @@ export function SiriusSpace({
 
   return (
     <group ref={groupRef} position={position}>
-      <SiriusSystem
+      <BetelgeuseSystem
         showLabels={true}
         onPlanetLabelClick={onPlanetLabelClick}
         focusedPlanetName={focusedPlanetName}
@@ -33,4 +33,4 @@ export function SiriusSpace({
   );
 }
 
-export default SiriusSpace;
+export default BetelgeuseSpace;

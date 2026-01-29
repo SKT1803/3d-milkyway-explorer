@@ -5,7 +5,7 @@ import * as THREE from "three";
 
 export const CameraControls = forwardRef(function CameraControls(
   { autoRotate, onCameraChange },
-  ref
+  ref,
 ) {
   const controlsRef = useRef(null);
   const { camera } = useThree();
@@ -36,7 +36,7 @@ export const CameraControls = forwardRef(function CameraControls(
     if (controlsRef.current && onCameraChange) {
       onCameraChange(
         camera.position.clone(),
-        controlsRef.current.target.clone()
+        controlsRef.current.target.clone(),
       );
     }
   });
@@ -52,7 +52,7 @@ export const CameraControls = forwardRef(function CameraControls(
         controlsRef.current.target.set(
           targetArray[0],
           targetArray[1],
-          targetArray[2]
+          targetArray[2],
         );
         controlsRef.current.update();
       }
@@ -65,14 +65,14 @@ export const CameraControls = forwardRef(function CameraControls(
       const toPos = new THREE.Vector3(
         positionArray[0],
         positionArray[1],
-        positionArray[2]
+        positionArray[2],
       );
 
       const fromTarget = controlsRef.current.target.clone();
       const toTarget = new THREE.Vector3(
         targetArray[0],
         targetArray[1],
-        targetArray[2]
+        targetArray[2],
       );
 
       animationRef.current = {
@@ -92,7 +92,7 @@ export const CameraControls = forwardRef(function CameraControls(
       enablePan
       enableZoom
       enableRotate
-      minDistance={1}
+      minDistance={0.2}
       maxDistance={5500} // far ile aynı aralıkta tut, kamerayı en fazla x uzağa göndermesine izin veriyoruz. fardan < olsun
       autoRotate={autoRotate}
       autoRotateSpeed={0.3}

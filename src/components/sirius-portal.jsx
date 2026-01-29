@@ -2,18 +2,11 @@ import { useRef } from "react";
 import { Html } from "@react-three/drei";
 import { MilkyWay } from "./milky-way";
 
-export function SiriusPortal({ label, position /*, onClick */ }) {
+export function SiriusPortal({ label, position }) {
   const ref = useRef();
 
   return (
-    <group
-      ref={ref}
-      position={position}
-      // Tıklama yok – sadece görsel portal:
-      // onClick={onClick}
-      // onPointerOver={() => (document.body.style.cursor = "pointer")}
-      // onPointerOut={() => (document.body.style.cursor = "default")}
-    >
+    <group ref={ref} position={position}>
       <group scale={0.22} rotation={[0, 0.18, 0.08]}>
         <MilkyWay
           count={2300}

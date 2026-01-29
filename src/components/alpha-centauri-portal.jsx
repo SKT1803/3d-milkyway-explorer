@@ -2,18 +2,11 @@ import { useRef } from "react";
 import { Html } from "@react-three/drei";
 import { MilkyWay } from "./milky-way";
 
-export function AlphaCentauriPortal({ label, position /*, onClick */ }) {
+export function AlphaCentauriPortal({ label, position }) {
   const ref = useRef();
 
   return (
-    <group
-      ref={ref}
-      position={position}
-      // tıklanabilir yapmak icin:
-      // onClick={onClick}
-      // onPointerOver={() => (document.body.style.cursor = "pointer")}
-      // onPointerOut={() => (document.body.style.cursor = "default")}
-    >
+    <group ref={ref} position={position}>
       <group scale={0.24} rotation={[0, -0.15, 0.1]}>
         <MilkyWay
           count={2600}
@@ -70,7 +63,7 @@ export function AlphaCentauriPortal({ label, position /*, onClick */ }) {
           />
         </mesh>
 
-        {/* Proxima Centauri – uzakta küçük kırmızımsı */}
+        {/* Proxima Centauri */}
         <mesh position={[0.8, -0.03, -0.4]}>
           <sphereGeometry args={[0.11, 32, 32]} />
           <meshStandardMaterial

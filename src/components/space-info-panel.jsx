@@ -15,14 +15,53 @@ export function SpaceInfoPanel({
   onResetSolarSystemView,
   onResetSiriusView,
   onResetAlphaView,
+  onSetFocusBetelgeuse,
+  onResetBetelgeuseView,
+  onSetFocusNaos,
+  onResetNaosView,
+  onSetFocusAntares,
+  onResetAntaresView,
+  onSetFocusCapella,
+  onResetCapellaView,
+  onSetFocusCastor,
+  onResetCastorView,
+  onSetFocusSagittarius,
+  onResetSagittariusView,
+  onSetFocusKepler22,
+  onResetKepler22View,
+  onSetFocusVega,
+  onResetVegaView,
 }) {
   const inGalaxy = mode === "galaxy";
   const inSolarSystem = mode === "inner" && activeInnerSpace === "sun";
   const inSiriusSystem = mode === "inner" && activeInnerSpace === "sirius";
   const inAlphaSystem =
     mode === "inner" && activeInnerSpace === "alphaCentauri";
+  const inBetelgeuseSystem =
+    mode === "inner" && activeInnerSpace === "betelgeuse";
+  const inNaosSystem = mode === "inner" && activeInnerSpace === "naos";
+  const inAntaresSystem = mode === "inner" && activeInnerSpace === "antares";
+  const inCapellaSystem = mode === "inner" && activeInnerSpace === "capella";
+  const inCastorSystem = mode === "inner" && activeInnerSpace === "castor";
+  const inSagittariusSystem =
+    mode === "inner" && activeInnerSpace === "sagittarius";
+  const inKepler22System = mode === "inner" && activeInnerSpace === "kepler22";
+  const inVegaSystem = mode === "inner" && activeInnerSpace === "vega";
 
-  const inEarthSystem = focusedPlanet === "Earth" || focusedPlanet === "Moon";
+  const freeSpaceSolarOrbiters = {
+    Earth: ["ISS", "Hubble"],
+    // Mars: ["..."],
+    // Jupiter: ["..."],
+  };
+
+  const freeSpaceSolarProbes = ["Voyager 1", "New Horizons"];
+  const freeSpaceInterstellar = ["Voyager 1", "New Horizons"];
+
+  const inEarthSystem =
+    focusedPlanet === "Earth" ||
+    focusedPlanet === "Moon" ||
+    focusedPlanet === "ISS" ||
+    focusedPlanet === "Hubble";
 
   const inMarsSystem =
     focusedPlanet === "Mars" ||
@@ -76,10 +115,29 @@ export function SpaceInfoPanel({
     "Neptune",
   ];
 
-  const dwarfPlanets = ["Pluto", "Haumea", "Makemake", "Eris"];
+  const dwarfPlanets = ["Pluto", "Haumea", "Makemake", "Eris", "Ceres"];
   const beltRegions = ["Asteroid Belt", "Kuiper Belt"];
   const siriusBodies = ["Sirius A", "Sirius B"];
   const alphaBodies = ["Rigil Kentaurus", "Toliman", "Proxima Centauri"];
+  const antaresBodies = ["Antares A", "Antares B"];
+  const capellaBodies = ["Capella Aa", "Capella Ab", "Capella H", "Capella L"];
+  const castorBodies = [
+    "Castor Aa",
+    "Castor Ab",
+    "Castor Ba",
+    "Castor Bb",
+    "YY Gem A (Ca)",
+    "YY Gem B (Cb)",
+  ];
+
+  const sagittariusBodies = ["Sagittarius A*", "S2", "S0-102", "S38", "S62"];
+  const kepler22Bodies = ["Kepler-22", "Kepler-22b"];
+  const vegaBodies = ["Vega"];
+
+  const handleFocusClick = (e, name) => {
+    e.stopPropagation();
+    onPlanetButtonClick?.(name);
+  };
 
   const renderBodyButton = (name) => (
     <button
@@ -90,17 +148,47 @@ export function SpaceInfoPanel({
             ? "bg-white text-black border-white"
             : "bg-black/40 border-white/30 text-gray-300"
         }`}
-      onClick={() => onPlanetButtonClick(name)}
+      onClick={(e) => handleFocusClick(e, name)}
       disabled={isWarping || isBackAnimating}
     >
       {name}
     </button>
   );
 
+  const renderSmallButton = (name) => (
+    <button
+      key={name}
+      className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
+        ${
+          focusedPlanet === name
+            ? "bg-white text-black border-white"
+            : "bg-black/40 border-white/30 text-gray-300"
+        }`}
+      onClick={(e) => handleFocusClick(e, name)}
+      disabled={isWarping || isBackAnimating}
+    >
+      {name}
+    </button>
+  );
+
+  const inInterstellar =
+    !inGalaxy &&
+    !inSolarSystem &&
+    !inSiriusSystem &&
+    !inAlphaSystem &&
+    !inBetelgeuseSystem &&
+    !inNaosSystem &&
+    !inAntaresSystem &&
+    !inCapellaSystem &&
+    !inCastorSystem &&
+    !inSagittariusSystem &&
+    !inKepler22System &&
+    !inVegaSystem;
+
   return (
     <div className="absolute top-4 left-4 z-30 pointer-events-none">
       <div className="flex gap-3 items-start">
-        <div className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[300px] text-[1rem]">
+        <div className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[304px] text-[1rem]">
           {/* Location */}
           <div className="text-white text-2xl font-semibold mb-1 leading-snug">
             <span className="block text-[0.9rem] uppercase tracking-[0.16em] text-gray-400">
@@ -110,12 +198,28 @@ export function SpaceInfoPanel({
               {inGalaxy
                 ? "Milky Way Galaxy"
                 : inSolarSystem
-                ? "Solar System"
-                : inSiriusSystem
-                ? "Sirius System"
-                : inAlphaSystem
-                ? "Alpha Centauri System"
-                : "Interstellar Space"}
+                  ? "Solar System"
+                  : inSiriusSystem
+                    ? "Sirius System"
+                    : inAlphaSystem
+                      ? "Alpha Centauri System"
+                      : inBetelgeuseSystem
+                        ? "Betelgeuse System"
+                        : inNaosSystem
+                          ? "Naos System"
+                          : inAntaresSystem
+                            ? "Antares System"
+                            : inCapellaSystem
+                              ? "Capella System"
+                              : inCastorSystem
+                                ? "Castor System"
+                                : inSagittariusSystem
+                                  ? "Sagittarius A* (Galactic Center)"
+                                  : inKepler22System
+                                    ? "Kepler-22 System"
+                                    : inVegaSystem
+                                      ? "Vega System"
+                                      : "Interstellar Space"}
             </span>
           </div>
 
@@ -131,7 +235,17 @@ export function SpaceInfoPanel({
               </>
             )}
 
-            {(inSolarSystem || inSiriusSystem || inAlphaSystem) &&
+            {(inSolarSystem ||
+              inSiriusSystem ||
+              inAlphaSystem ||
+              inBetelgeuseSystem ||
+              inNaosSystem ||
+              inAntaresSystem ||
+              inCapellaSystem ||
+              inCastorSystem ||
+              inSagittariusSystem ||
+              inKepler22System ||
+              inVegaSystem) &&
               focusedPlanet && (
                 <>
                   <div className="font-medium text-lg">Distance</div>
@@ -145,11 +259,15 @@ export function SpaceInfoPanel({
                         {focusedPlanet === "Venus" && "0.72 AU from the Sun"}
                         {focusedPlanet === "Earth" && "1 AU from the Sun"}
                         {focusedPlanet === "Moon" && "384,400 km from Earth"}
+                        {focusedPlanet === "ISS" &&
+                          "Low Earth Orbit (LEO) ~400 km altitude (orbits Earth ~90 minutes)"}
+
                         {focusedPlanet === "Mars" && "1.52 AU from the Sun"}
                         {focusedPlanet === "Jupiter" && "5.2 AU from the Sun"}
                         {focusedPlanet === "Saturn" && "9.54 AU from the Sun"}
                         {focusedPlanet === "Uranus" && "19.2 AU from the Sun"}
                         {focusedPlanet === "Neptune" && "30.06 AU from the Sun"}
+
                         {focusedPlanet === "Pluto" &&
                           "≈39.5 AU from the Sun (dwarf planet)"}
                         {focusedPlanet === "Haumea" &&
@@ -158,60 +276,38 @@ export function SpaceInfoPanel({
                           "≈45.8 AU from the Sun (dwarf planet)"}
                         {focusedPlanet === "Eris" &&
                           "≈67.7 AU from the Sun (dwarf planet)"}
-                        {focusedPlanet === "Phobos" &&
-                          "Inner moon of Mars (~9,400 km from Mars)"}
-                        {focusedPlanet === "Deimos" &&
-                          "Outer moon of Mars (~23,500 km from Mars)"}
-                        {focusedPlanet === "Europa" &&
-                          "Orbits Jupiter (~671,000 km from Jupiter)"}
-                        {focusedPlanet === "Elara" &&
-                          "Orbits Jupiter (~11.7 million km from Jupiter)"}
-                        {focusedPlanet === "Io" &&
-                          "Orbits Jupiter (~421,700 km from Jupiter)"}
-                        {focusedPlanet === "Ganymede" &&
-                          "Orbits Jupiter (~1,070,000 km from Jupiter)"}
-                        {focusedPlanet === "Callisto" &&
-                          "Orbits Jupiter (~1,883,000 km from Jupiter)"}
-                        {focusedPlanet === "Amalthea" &&
-                          "Inner moon of Jupiter (~181,000 km from Jupiter)"}
-                        {focusedPlanet === "Himalia" &&
-                          "Outer irregular moon (~11.5 million km from Jupiter)"}
-                        {focusedPlanet === "Pasiphae" &&
-                          "Retrograde irregular moon (~23 million km from Jupiter)"}
-                        {focusedPlanet === "Thebe" &&
-                          "Inner moon of Jupiter (~222,000 km from Jupiter)"}
-                        {focusedPlanet === "Titan" &&
-                          "Largest moon of Saturn (~1.2 million km from Saturn)"}
-                        {focusedPlanet === "Rhea" &&
-                          "Orbits Saturn (~527,000 km from Saturn)"}
-                        {focusedPlanet === "Dione" &&
-                          "Orbits Saturn (~377,000 km from Saturn)"}
-                        {focusedPlanet === "Tethys" &&
-                          "Orbits Saturn (~295,000 km from Saturn)"}
-                        {focusedPlanet === "Enceladus" &&
-                          "Ice-rich moon (~238,000 km from Saturn)"}
-                        {focusedPlanet === "Mimas" &&
-                          "Cratered moon (~186,000 km from Saturn)"}
-                        {focusedPlanet === "Iapetus" &&
-                          "Distant moon (~3.5 million km from Saturn)"}
-                        {focusedPlanet === "Miranda" &&
-                          "Innermost major moon of Uranus (~130,000 km from Uranus)"}
-                        {focusedPlanet === "Ariel" &&
-                          "Icy moon of Uranus (~191,000 km from Uranus)"}
-                        {focusedPlanet === "Umbriel" &&
-                          "Dark moon of Uranus (~266,000 km from Uranus)"}
-                        {focusedPlanet === "Titania" &&
-                          "Largest moon of Uranus (~436,000 km from Uranus)"}
-                        {focusedPlanet === "Oberon" &&
-                          "Outer large moon of Uranus (~583,000 km from Uranus)"}
-                        {focusedPlanet === "Proteus" &&
-                          "Inner irregular moon of Neptune (~117,600 km from Neptune)"}
-                        {focusedPlanet === "Triton" &&
-                          "Largest moon of Neptune (~354,800 km from Neptune)"}
+                        {focusedPlanet === "Ceres" &&
+                          "≈2.77 AU from the Sun (dwarf planet in the asteroid belt)"}
+
+                        {focusedPlanet === "Voyager 1" &&
+                          "Interplanetary / Interstellar probe (launched 1977) – far beyond outer planets"}
+
                         {focusedPlanet === "Asteroid Belt" &&
                           "Region of rocky bodies between Mars and Jupiter (~2–3.5 AU from the Sun)"}
                         {focusedPlanet === "Kuiper Belt" &&
                           "Icy debris region beyond Neptune (~30–50 AU from the Sun)"}
+
+                        {focusedPlanet === "New Horizons" &&
+                          "Interplanetary probe (launched 2006) – Pluto flyby, Kuiper Belt exploration"}
+
+                        {focusedPlanet === "Hubble" &&
+                          "Low Earth Orbit space telescope (~540 km altitude) – Earth orbit observatory"}
+                      </>
+                    )}
+
+                    {inSagittariusSystem && (
+                      <>
+                        {focusedPlanet === "Sagittarius A*" &&
+                          "Supermassive black hole at the Milky Way’s center (~26,000 light-years from Earth)."}
+
+                        {focusedPlanet === "S2" &&
+                          "S-star orbiting Sagittarius A* (one of the best-known close-orbit stars)."}
+                        {focusedPlanet === "S0-102" &&
+                          "Very fast-orbit S-star around Sagittarius A* (short-period orbiter)."}
+                        {focusedPlanet === "S38" &&
+                          "S-star orbiting Sagittarius A* (inner cluster member)."}
+                        {focusedPlanet === "S62" &&
+                          "S-star orbiting Sagittarius A* (inner cluster member)."}
                       </>
                     )}
 
@@ -236,7 +332,239 @@ export function SpaceInfoPanel({
                           "Red dwarf third component, closest known star to the Sun (~4.24 ly)"}
                       </>
                     )}
+                    {/* Betelgeuse System */}
+                    {inBetelgeuseSystem && (
+                      <>
+                        {focusedPlanet === "Betelgeuse" &&
+                          "Red supergiant star in Orion (distance ~500–700 light-years, approximate)"}
+                      </>
+                    )}
+                    {/* Naos System */}
+                    {inNaosSystem && (
+                      <>
+                        {focusedPlanet === "Naos" &&
+                          "Blue supergiant in Puppis (distance ~1,000+ light-years, approximate)"}
+                      </>
+                    )}
+
+                    {/* Antares System */}
+                    {inAntaresSystem && (
+                      <>
+                        {focusedPlanet === "Antares A" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Alpha Scorpii A (Antares A)
+                            </div>
+                            <div className="mt-0.5">
+                              ~550 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Red supergiant primary — much brighter than B.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Antares B" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Alpha Scorpii B (Antares B)
+                            </div>
+                            <div className="mt-0.5">
+                              ~550 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Blue-white companion — wide binary companion.
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+                    {/* Kepler22System System */}
+                    {inKepler22System && (
+                      <>
+                        {focusedPlanet === "Kepler-22" &&
+                          "Kepler-22 host star (~600 ly, approx.)"}
+                        {focusedPlanet === "Kepler-22b" &&
+                          "Exoplanet around Kepler-22 (~600 ly, approx.)"}
+                      </>
+                    )}
+
+                    {/* Capella System */}
+                    {inCapellaSystem && (
+                      <>
+                        {focusedPlanet === "Capella Aa" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Capella Aa
+                            </div>
+                            <div className="mt-0.5">
+                              ~43 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Bright orange/yellow giant component of the close
+                              binary.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Capella Ab" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Capella Ab
+                            </div>
+                            <div className="mt-0.5">
+                              ~43 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Companion giant — the second bright component of
+                              the close pair.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Capella H" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Capella H
+                            </div>
+                            <div className="mt-0.5">
+                              ~43 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Dim red dwarf component — far wider companion
+                              system.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Capella L" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Capella L
+                            </div>
+                            <div className="mt-0.5">
+                              ~43 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Dim red dwarf companion — paired with H as a wide
+                              companion.
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+                    {inCastorSystem && (
+                      <>
+                        {focusedPlanet === "Castor Aa" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Castor Aa
+                            </div>
+                            <div className="mt-0.5">
+                              ~51.6 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Bright component of the Aa–Ab close binary (Castor
+                              A).
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Castor A and Castor B form a wider pair on a much
+                              larger orbit.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Castor Ab" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Castor Ab
+                            </div>
+                            <div className="mt-0.5">
+                              ~51.6 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Companion in the Aa–Ab close binary (Castor A).
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Castor Ba" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Castor Ba
+                            </div>
+                            <div className="mt-0.5">
+                              ~51.6 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Bright component of the Ba–Bb close binary (Castor
+                              B).
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Castor B is the wide companion of Castor A in the
+                              AB system.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "Castor Bb" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              Castor Bb
+                            </div>
+                            <div className="mt-0.5">
+                              ~51.6 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Companion in the Ba–Bb close binary (Castor B).
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "YY Gem A (Ca)" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              YY Gem A (Ca)
+                            </div>
+                            <div className="mt-0.5">
+                              ~51.6 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Red dwarf in the YY Gem close binary (Castor C).
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              A separate close pair system, widely separated
+                              from the AB pair.
+                            </div>
+                          </>
+                        )}
+
+                        {focusedPlanet === "YY Gem B (Cb)" && (
+                          <>
+                            <div className="font-medium text-gray-200">
+                              YY Gem B (Cb)
+                            </div>
+                            <div className="mt-0.5">
+                              ~51.6 light-years from Earth (approx.)
+                            </div>
+                            <div className="text-gray-400 text-[0.92rem] mt-1">
+                              Second red dwarf in the YY Gem close binary
+                              (Castor C).
+                            </div>
+                          </>
+                        )}
+                      </>
+                    )}
+
+                    {/* Vega System */}
+                    {inVegaSystem && (
+                      <>
+                        {focusedPlanet === "Vega" &&
+                          "Bright blue-white star ~25 light-years from Earth (approx.)"}
+                      </>
+                    )}
                   </div>
+
                   <div className="text-gray-400 text-[0.9rem] mt-1">
                     Values are approximate average orbital / stellar distances.
                   </div>
@@ -279,24 +607,120 @@ export function SpaceInfoPanel({
                 </div>
               </>
             )}
+            {inBetelgeuseSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Betelgeuse system (single star scene).
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Click the star or use the button below to focus.
+                </div>
+              </>
+            )}
 
-            {!inGalaxy &&
-              !inSolarSystem &&
-              !inSiriusSystem &&
-              !inAlphaSystem && (
-                <>
-                  <div className="font-medium text-lg">Overview</div>
-                  <div className="mt-0.5">
-                    Navigating through interstellar space between stars.
-                  </div>
-                  <div className="text-gray-400 text-[0.9rem] mt-1">
-                    This region can host additional inner scenes in the future.
-                  </div>
-                </>
-              )}
+            {inNaosSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Naos system (single star scene).
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Click the star or use the button below to focus.
+                </div>
+              </>
+            )}
+
+            {inAntaresSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Antares binary star system.
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Focus on Antares A (red supergiant) or Antares B (blue-white
+                  companion).
+                </div>
+              </>
+            )}
+
+            {inCapellaSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Capella multi-star system.
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Focus on Capella Aa, Ab, H, or L using the buttons below or by
+                  clicking the stars.
+                </div>
+              </>
+            )}
+
+            {inCastorSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Castor sextuple star system.
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Castor A (Aa–Ab) and Castor B (Ba–Bb) form a wide pair. YY Gem
+                  (Ca–Cb) is a distant third binary.
+                </div>
+              </>
+            )}
+
+            {inSagittariusSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are near Sagittarius A* (Galactic Center).
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Focus on Sagittarius A* for a close-up core view, or select
+                  S-stars to see orbiting targets.
+                </div>
+              </>
+            )}
+
+            {inKepler22System && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Kepler-22 system.
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Focus the host star or Kepler-22b using the buttons below.
+                </div>
+              </>
+            )}
+
+            {inVegaSystem && !focusedPlanet && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  You are inside the Vega system (single star scene).
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  Click Vega or use the button below to focus.
+                </div>
+              </>
+            )}
+
+            {inInterstellar && (
+              <>
+                <div className="font-medium text-lg">Overview</div>
+                <div className="mt-0.5">
+                  Navigating through interstellar space between stars.
+                </div>
+                <div className="text-gray-400 text-[0.9rem] mt-1">
+                  This region can host additional inner scenes in the future.
+                </div>
+              </>
+            )}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 space-scroll max-h-[58vh] overflow-y-auto pr-2">
             {inGalaxy && (
               <>
                 <div className="text-gray-400 text-[0.9rem] mb-1">
@@ -304,60 +728,159 @@ export function SpaceInfoPanel({
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  {/* Galaxy */}
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-          ${
-            focus === "milkyWay"
-              ? "bg-blue-500/30 border-blue-400 text-white"
-              : "bg-black/40 border-white/20 text-gray-300"
-          }`}
+                      ${
+                        focus === "milkyWay"
+                          ? "bg-blue-500/30 border-blue-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
                     onClick={onSetFocusMilkyWay}
                     disabled={isWarping}
                   >
                     Galaxy
                   </button>
 
-                  {/* Solar */}
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-          ${
-            focus === "sun"
-              ? "bg-yellow-500/30 border-yellow-400 text-white"
-              : "bg-black/40 border-white/20 text-gray-300"
-          }`}
+                          ${
+                            focus === "sagittarius"
+                              ? "bg-purple-500/30 border-purple-400 text-white"
+                              : "bg-black/40 border-white/20 text-gray-300"
+                          }`}
+                    onClick={onSetFocusSagittarius}
+                    disabled={isWarping}
+                  >
+                    Sagittarius A*
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                      ${
+                        focus === "sun"
+                          ? "bg-yellow-500/30 border-yellow-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
                     onClick={onSetFocusSun}
                     disabled={isWarping}
                   >
                     Solar System
                   </button>
 
-                  {/* Sirius */}
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-          ${
-            focus === "sirius"
-              ? "bg-sky-500/30 border-sky-400 text-white"
-              : "bg-black/40 border-white/20 text-gray-300"
-          }`}
+                          ${
+                            focus === "kepler22"
+                              ? "bg-emerald-500/30 border-emerald-400 text-white"
+                              : "bg-black/40 border-white/20 text-gray-300"
+                          }`}
+                    onClick={onSetFocusKepler22}
+                    disabled={isWarping}
+                  >
+                    Kepler-22
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                      ${
+                        focus === "sirius"
+                          ? "bg-sky-500/30 border-sky-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
                     onClick={onSetFocusSirius}
                     disabled={isWarping}
                   >
                     Sirius System
                   </button>
 
-                  {/* Alpha Centauri */}
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-          ${
-            focus === "alphaCentauri"
-              ? "bg-emerald-500/30 border-emerald-400 text-white"
-              : "bg-black/40 border-white/20 text-gray-300"
-          }`}
+                      ${
+                        focus === "alphaCentauri"
+                          ? "bg-emerald-500/30 border-emerald-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
                     onClick={onSetFocusAlpha}
                     disabled={isWarping}
                   >
                     Alpha Centauri
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                          ${
+                            focus === "vega"
+                              ? "bg-indigo-500/30 border-indigo-400 text-white"
+                              : "bg-black/40 border-white/20 text-gray-300"
+                          }`}
+                    onClick={onSetFocusVega}
+                    disabled={isWarping}
+                  >
+                    Vega
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                      ${
+                        focus === "betelgeuse"
+                          ? "bg-rose-500/30 border-rose-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
+                    onClick={onSetFocusBetelgeuse}
+                    disabled={isWarping}
+                  >
+                    Betelgeuse
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                                ${
+                                  focus === "naos"
+                                    ? "bg-cyan-500/30 border-cyan-400 text-white"
+                                    : "bg-black/40 border-white/20 text-gray-300"
+                                }`}
+                    onClick={onSetFocusNaos}
+                    disabled={isWarping}
+                  >
+                    Naos
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                            ${
+                              focus === "antares"
+                                ? "bg-red-500/30 border-red-400 text-white"
+                                : "bg-black/40 border-white/20 text-gray-300"
+                            }`}
+                    onClick={onSetFocusAntares}
+                    disabled={isWarping}
+                  >
+                    Antares
+                  </button>
+
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                      ${
+                        focus === "capella"
+                          ? "bg-amber-500/30 border-amber-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
+                    onClick={onSetFocusCapella}
+                    disabled={isWarping}
+                  >
+                    Capella
+                  </button>
+                  <button
+                    className={`w-full px-3 py-1.5 rounded text-base border transition-all
+                      ${
+                        focus === "castor"
+                          ? "bg-blue-500/30 border-blue-400 text-white"
+                          : "bg-black/40 border-white/20 text-gray-300"
+                      }`}
+                    onClick={onSetFocusCastor}
+                    disabled={isWarping}
+                  >
+                    Castor
                   </button>
                 </div>
               </>
@@ -392,7 +915,7 @@ export function SpaceInfoPanel({
                       <div className="text-gray-400 text-[0.8rem] uppercase tracking-wide mb-1">
                         Dwarf planets
                       </div>
-                      <div className="grid grid-cols-2 gap-1.5">
+                      <div className="grid grid-cols-3 gap-1.5">
                         {dwarfPlanets.map(renderBodyButton)}
                       </div>
                     </div>
@@ -405,6 +928,19 @@ export function SpaceInfoPanel({
                         {beltRegions.map(renderBodyButton)}
                       </div>
                     </div>
+
+                    {/* probes / spacecraft (planet'e bağlı değil) */}
+                    {freeSpaceSolarProbes.length > 0 && (
+                      <div className="mb-2">
+                        <div className="text-gray-400 text-[0.8rem] uppercase tracking-wide mb-1 whitespace-normal break-words leading-tight">
+                          Probes & spacecraft
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-1.5">
+                          {freeSpaceSolarProbes.map(renderBodyButton)}
+                        </div>
+                      </div>
+                    )}
 
                     <button
                       className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
@@ -460,6 +996,189 @@ export function SpaceInfoPanel({
                     </button>
                   </>
                 )}
+
+                {inBetelgeuseSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select star:
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {["Betelgeuse"].map(renderBodyButton)}
+                      <div
+                        className="opacity-0 pointer-events-none"
+                        aria-hidden="true"
+                      >
+                        placeholder
+                      </div>
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetBetelgeuseView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inNaosSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select star:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {["Naos"].map(renderBodyButton)}
+                      <div
+                        className="opacity-0 pointer-events-none"
+                        aria-hidden="true"
+                      >
+                        placeholder
+                      </div>
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetNaosView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inAntaresSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select star:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {antaresBodies.map(renderBodyButton)}
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetAntaresView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inCapellaSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select star:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {capellaBodies.map(renderBodyButton)}
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetCapellaView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inCastorSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select star:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {castorBodies.map(renderBodyButton)}
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetCastorView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inSagittariusSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select target:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {sagittariusBodies.map(renderBodyButton)}
+                      <div
+                        className="opacity-0 pointer-events-none"
+                        aria-hidden="true"
+                      >
+                        placeholder
+                      </div>
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetSagittariusView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inKepler22System && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select target:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {kepler22Bodies.map(renderBodyButton)}
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetKepler22View}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
+
+                {inVegaSystem && (
+                  <>
+                    <div className="text-gray-400 text-[0.9rem] mb-1">
+                      Select star:
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1.5 mb-1">
+                      {vegaBodies.map(renderBodyButton)}
+                      <div
+                        className="opacity-0 pointer-events-none"
+                        aria-hidden="true"
+                      >
+                        placeholder
+                      </div>
+                    </div>
+
+                    <button
+                      className="w-full px-3 py-1.5 rounded text-base border border-gray-500/50 bg-black/60 text-gray-300 mt-1"
+                      onClick={onResetVegaView}
+                      disabled={isWarping || isBackAnimating}
+                    >
+                      Reset View
+                    </button>
+                  </>
+                )}
               </>
             )}
           </div>
@@ -475,25 +1194,34 @@ export function SpaceInfoPanel({
             <div className="flex flex-col gap-2 pointer-events-auto">
               {/* Earth system */}
               {inEarthSystem && (
-                <div className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-2.5 shadow-xl min-w-[120px] max-w-[150px]">
-                  <div className="text-gray-300 text-sm font-medium mb-1">
+                <div className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-2.5 shadow-xl min-w-[140px] max-w-[190px]">
+                  <div className="text-gray-300 text-sm font-medium mb-2">
                     Around{" "}
                     <span className="text-gray-100 font-semibold">Earth</span>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <button
-                      className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
-                      ${
-                        focusedPlanet === "Moon"
-                          ? "bg-white text-black border-white"
-                          : "bg-black/40 border-white/30 text-gray-300"
-                      }`}
-                      onClick={() => onPlanetButtonClick("Moon")}
-                      disabled={isWarping || isBackAnimating}
-                    >
+                  {/* Moon */}
+                  <div className="mb-2">
+                    <div className="text-gray-400 text-[0.72rem] uppercase tracking-wide mb-1">
                       Moon
-                    </button>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      {renderSmallButton("Moon")}
+                    </div>
                   </div>
+
+                  {/* Orbiters */}
+                  {(freeSpaceSolarOrbiters.Earth ?? []).length > 0 && (
+                    <div>
+                      <div className="text-gray-400 text-[0.72rem] uppercase tracking-wide mb-1">
+                        Orbiters
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        {(freeSpaceSolarOrbiters.Earth ?? []).map(
+                          renderSmallButton,
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -505,21 +1233,7 @@ export function SpaceInfoPanel({
                     <span className="text-gray-100 font-semibold">Mars</span>
                   </div>
                   <div className="flex flex-col gap-1">
-                    {["Phobos", "Deimos"].map((name) => (
-                      <button
-                        key={name}
-                        className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
-                        ${
-                          focusedPlanet === name
-                            ? "bg-white text-black border-white"
-                            : "bg-black/40 border-white/30 text-gray-300"
-                        }`}
-                        onClick={() => onPlanetButtonClick(name)}
-                        disabled={isWarping || isBackAnimating}
-                      >
-                        {name}
-                      </button>
-                    ))}
+                    {["Phobos", "Deimos"].map(renderSmallButton)}
                   </div>
                 </div>
               )}
@@ -542,21 +1256,7 @@ export function SpaceInfoPanel({
                       "Himalia",
                       "Elara",
                       "Pasiphae",
-                    ].map((name) => (
-                      <button
-                        key={name}
-                        className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
-                        ${
-                          focusedPlanet === name
-                            ? "bg-white text-black border-white"
-                            : "bg-black/40 border-white/30 text-gray-300"
-                        }`}
-                        onClick={() => onPlanetButtonClick(name)}
-                        disabled={isWarping || isBackAnimating}
-                      >
-                        {name}
-                      </button>
-                    ))}
+                    ].map(renderSmallButton)}
                   </div>
                 </div>
               )}
@@ -577,21 +1277,7 @@ export function SpaceInfoPanel({
                       "Enceladus",
                       "Mimas",
                       "Iapetus",
-                    ].map((name) => (
-                      <button
-                        key={name}
-                        className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
-                        ${
-                          focusedPlanet === name
-                            ? "bg-white text-black border-white"
-                            : "bg-black/40 border-white/30 text-gray-300"
-                        }`}
-                        onClick={() => onPlanetButtonClick(name)}
-                        disabled={isWarping || isBackAnimating}
-                      >
-                        {name}
-                      </button>
-                    ))}
+                    ].map(renderSmallButton)}
                   </div>
                 </div>
               )}
@@ -605,21 +1291,7 @@ export function SpaceInfoPanel({
                   </div>
                   <div className="flex flex-col gap-1">
                     {["Miranda", "Ariel", "Umbriel", "Titania", "Oberon"].map(
-                      (name) => (
-                        <button
-                          key={name}
-                          className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
-                        ${
-                          focusedPlanet === name
-                            ? "bg-white text-black border-white"
-                            : "bg-black/40 border-white/30 text-gray-300"
-                        }`}
-                          onClick={() => onPlanetButtonClick(name)}
-                          disabled={isWarping || isBackAnimating}
-                        >
-                          {name}
-                        </button>
-                      )
+                      renderSmallButton,
                     )}
                   </div>
                 </div>
@@ -633,21 +1305,7 @@ export function SpaceInfoPanel({
                     <span className="text-gray-100 font-semibold">Neptune</span>
                   </div>
                   <div className="flex flex-col gap-1">
-                    {["Proteus", "Triton"].map((name) => (
-                      <button
-                        key={name}
-                        className={`w-full px-2 py-1 rounded text-[0.85rem] border transition-all
-                        ${
-                          focusedPlanet === name
-                            ? "bg-white text-black border-white"
-                            : "bg-black/40 border-white/30 text-gray-300"
-                        }`}
-                        onClick={() => onPlanetButtonClick(name)}
-                        disabled={isWarping || isBackAnimating}
-                      >
-                        {name}
-                      </button>
-                    ))}
+                    {["Proteus", "Triton"].map(renderSmallButton)}
                   </div>
                 </div>
               )}

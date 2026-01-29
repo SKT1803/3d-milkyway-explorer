@@ -36,7 +36,7 @@ export function AsteroidBelt({
       temp.position.set(
         Math.cos(angle) * radius,
         height,
-        Math.sin(angle) * radius
+        Math.sin(angle) * radius,
       );
 
       const s = minScale + Math.random() * (maxScale - minScale);

@@ -20,6 +20,7 @@ export function EarthSystem({
   showLabels,
   focusedPlanetName,
   onPlanetLabelClick,
+  children,
 }) {
   const moonAngleRef = useRef(0);
 
@@ -43,7 +44,7 @@ export function EarthSystem({
     if (!moonRef.current) return;
 
     const stop = focusedPlanetName === "Moon";
-    const speed = stop ? 0 : 1.2; // orbit hızı
+    const speed = stop ? 0 : 1.2;
     moonAngleRef.current += speed * delta;
 
     const a = moonAngleRef.current;
@@ -68,7 +69,7 @@ export function EarthSystem({
             metalness={0.3}
           />
 
-          {/* Bulut layer */}
+          {/* Clouds */}
           <mesh ref={cloudsRef}>
             <sphereGeometry args={[earthRadius * 1.02, 96, 96]} />
             <meshStandardMaterial
@@ -95,9 +96,10 @@ export function EarthSystem({
           )}
         </mesh>
 
-        {/* MOON SYSTEM – Earth merkezli, tiltli orbit düzlemi */}
+        {children}
+
+        {/* MOON SYSTEM */}
         <group ref={moonGroupRef} rotation={[moonTiltRad, 0, 0]}>
-          {/* Ring: XY düzleminde, tilt grubuyla birlikte eğiliyor */}
           <mesh>
             <ringGeometry
               args={[moonOrbitRadius - 0.01, moonOrbitRadius + 0.01, 96]}
