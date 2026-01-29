@@ -865,6 +865,111 @@ export default function App() {
     "New Horizons",
   ];
 
+  const InnerFallback = () => (
+    <Html center>
+      <div
+        style={{
+          position: "relative",
+          padding: "30px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "15px",
+        }}
+      >
+        {/* Orbital rings */}
+        <div style={{ position: "relative", width: "80px", height: "80px" }}>
+          {/* Outer ring */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              border: "2px solid rgba(100, 150, 255, 0.3)",
+              borderRadius: "50%",
+              borderTopColor: "#4a9eff",
+              animation: "spin 2s linear infinite",
+            }}
+          />
+          {/* Middle ring */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "10px",
+              border: "2px solid rgba(150, 100, 255, 0.3)",
+              borderRadius: "50%",
+              borderRightColor: "#9d4aff",
+              animation: "spin 1.5s linear infinite reverse",
+            }}
+          />
+          {/* Inner ring */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "20px",
+              border: "2px solid rgba(255, 100, 150, 0.3)",
+              borderRadius: "50%",
+              borderBottomColor: "#ff4a9d",
+              animation: "spin 1s linear infinite",
+            }}
+          />
+          {/* Center core */}
+          <div
+            style={{
+              position: "absolute",
+              inset: "32px",
+              background:
+                "radial-gradient(circle, #4a9eff 0%, transparent 70%)",
+              borderRadius: "50%",
+              animation: "pulse-glow 2s ease-in-out infinite",
+            }}
+          />
+        </div>
+
+        {/* Text */}
+        <div
+          style={{
+            color: "#88ccff",
+            fontSize: "13px",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+            letterSpacing: "3px",
+            fontWeight: "300",
+            textTransform: "uppercase",
+            animation: "fade 1.5s ease-in-out infinite",
+          }}
+        >
+          Loading system...
+        </div>
+
+        <style>
+          {`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+            @keyframes pulse-glow {
+              0%, 100% {
+                opacity: 0.4;
+                transform: scale(0.8);
+                filter: blur(4px);
+              }
+              50% {
+                opacity: 1;
+                transform: scale(1.2);
+                filter: blur(6px);
+              }
+            }
+            @keyframes fade {
+              0%, 100% { opacity: 0.4; }
+              50% { opacity: 1; }
+            }
+          `}
+        </style>
+      </div>
+    </Html>
+  );
+
+  const showSpaceLoading =
+    (mode === MODE.INNER || isBackAnimating) && activeInnerSpace !== null; // sadece gerçek spacelerde loading olsun
+
   return (
     <div className="w-full h-screen bg-black relative">
       {!isMilkyWayReady && <LoadingScreen />}
@@ -921,7 +1026,7 @@ export default function App() {
           autoRotate={showGalaxy && !isWarping && !isBackAnimating}
           onCameraChange={handleCameraChange}
         />
-        <Suspense fallback={null}>
+        <Suspense fallback={showSpaceLoading ? <InnerFallback /> : null}>
           <ambientLight intensity={0.35} />
           <pointLight
             position={[0, 0, 0]}
