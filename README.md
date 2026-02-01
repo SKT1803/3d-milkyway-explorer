@@ -5,25 +5,23 @@
   <h1>3D Milky Way Explorer</h1>
 
   <p>
-    An interactive 3D journey through the Milky Way galaxy — explore star systems,
-    dive into planetary systems, and navigate celestial bodies in real time. 
+    An interactive 3D journey through the Milky Way — explore star systems,
+    dive into planetary systems, and navigate celestial bodies in real time.
   </p>
 
- 
   <!-- BADGES -->
-<p>
-  <img src="https://img.shields.io/badge/Cosmic%203D%20Exploration-0F172A?style=for-the-badge&logo=starship&logoColor=A855F7" />
-</p>
+  <p>
+    <img src="https://img.shields.io/badge/Cosmic%203D%20Exploration-0F172A?style=for-the-badge&logo=starship&logoColor=A855F7" />
+  </p>
 
-<p>
-  <img src="https://img.shields.io/badge/Three.js-7C3AED?style=for-the-badge&logo=three.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/React-9333EA?style=for-the-badge&logo=react&logoColor=white" />
-  <img src="https://img.shields.io/badge/React%20Three%20Fiber-A855F7?style=for-the-badge&logo=react&logoColor=white" />
-  <img src="https://img.shields.io/badge/WebGL-6D28D9?style=for-the-badge&logo=webgl&logoColor=white" />
-  <img src="https://img.shields.io/badge/Vite-8B5CF6?style=for-the-badge&logo=vite&logoColor=white" />
-  <img src="https://img.shields.io/badge/TailwindCSS-7C3AED?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-</p>
-
+  <p>
+    <img src="https://img.shields.io/badge/Three.js-7C3AED?style=for-the-badge&logo=three.js&logoColor=white" />
+    <img src="https://img.shields.io/badge/React-9333EA?style=for-the-badge&logo=react&logoColor=white" />
+    <img src="https://img.shields.io/badge/React%20Three%20Fiber-A855F7?style=for-the-badge&logo=react&logoColor=white" />
+    <img src="https://img.shields.io/badge/WebGL-6D28D9?style=for-the-badge&logo=webgl&logoColor=white" />
+    <img src="https://img.shields.io/badge/Vite-8B5CF6?style=for-the-badge&logo=vite&logoColor=white" />
+    <img src="https://img.shields.io/badge/TailwindCSS-7C3AED?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  </p>
 
   <!-- LIVE DEMO -->
   <p>
@@ -32,67 +30,98 @@
       Try it on Vercel
     </a>
   </p>
-
 </div>
-
 
 ---
 
-
 ## 🌌 About the Project
 
-**3D Milky Way Explorer** is a fully interactive, real-time 3D visualization of our galaxy and nearby star systems.
+**3D Milky Way Explorer** is a real-time, fully interactive 3D visualization of the Milky Way and multiple featured destinations —
+from familiar planetary neighborhoods to iconic nearby stars and deep-space highlights.
 
-Unlike static space visualizations, this project allows users to:
+Unlike static space visualizations, this project lets you:
 
 - Navigate freely inside the Milky Way
-- Enter star systems via warp transitions
-- Explore planetary systems down to moons and belts
-- Interact with celestial bodies using both UI and direct scene clicks
+- Warp into star systems with smooth transitions
+- Explore planetary systems down to moons, rings, and belts
+- Inspect special deep-space objects (e.g., a supermassive black hole region)
+- Interact with spacecraft and satellites rendered as 3D models
 
-The project is built with a **state-driven navigation architecture**, ensuring smooth transitions between galaxy, star system, and planetary views.
+Built with a **state-driven navigation architecture**, the experience remains smooth while switching between
+galaxy → system → focused exploration modes.
 
 ---
 
 ## 🚀 Key Features
 
 - 🌌 **Procedural Milky Way Galaxy**
-- ⭐ **Multiple Star Systems**
-  - Solar System
-  - Sirius Binary System
-  - Alpha Centauri Triple System
-- 🪐 **Fully Modeled Planetary Systems**
-  - Planets, dwarf planets, moons
+  - Instanced star field + optimized rendering
+  - Label-driven destinations & clean UI navigation
+
+- ⭐ **Multiple Star Systems & Destinations**
+  - **Solar System**
+  - **Sirius A / B** (binary system)
+  - **Alpha Centauri** (triple system)
+  - **Vega**
+  - **Capella**
+  - **Castor**
+  - **Antares**
+  - **Naos**
+  - **Betelgeuse**
+  - **Kepler-22**
+  - **Sagittarius A\*** (supermassive black hole region)
+
+- 🪐 **Fully Modeled Planetary Exploration**
+  - Planets, dwarf planets, and moons
   - Asteroid Belt & Kuiper Belt
-- 🎥 **Advanced Camera Controls**
+  - Context-aware focus views (planet → moon → belt)
+
+- 🛰️ **Spacecraft & Orbital Assets (3D Models)**
+  - Probes & missions (e.g., **Voyager**, **New Horizons**)
+  - Space telescopes (e.g., **Hubble**)
+  - Human-made orbital structures (e.g., **ISS**)
+  - Interactive placement within the scene for cinematic exploration
+
+- 🕳️ **Black Hole Experience**
+  - Dedicated **Sagittarius A\*** destination
+  - Focus-friendly visuals + deep-space ambiance
+  - Designed to feel distinct from star/planet systems
+
+- 🎥 **Advanced Camera & Navigation Controls**
   - Warp-in / warp-out transitions
-  - Focus & reset per system
+  - Focus & reset per destination
+  - Smooth “return to galaxy” scaling
+
 - 🧭 **UI + 3D Scene Synchronization**
-  - Click planets directly
-  - Or navigate via the info panel
+  - Click directly in the 3D scene
+  - Or use the left info panel destinations
+
 - ✨ **Dynamic Labels**
   - Distance-aware scaling
-  - Context-sensitive visibility
+  - Context-sensitive visibility to reduce clutter
+
 - ⚡ **High Performance Rendering**
-  - Instancing
-  - Optimized geometries
-  - Smart visibility management
+  - Instancing + optimized geometries
+  - Smart visibility management for heavy scenes
 
 ---
 
 ## 🧭 Navigation Experience
 
 1. **Galaxy View**
-   - Free camera navigation
-   - Select destinations (Solar System, Sirius, Alpha Centauri)
+   - Free navigation across the Milky Way
+   - Select a destination (star systems, deep space objects, exoplanet system)
+
 2. **Warp Transition**
-   - Smooth animated entry into star systems
-3. **Inner Space**
-   - Planetary orbits
-   - Moons & sub-systems
-   - Focused exploration
+   - Smooth animated entry into the selected region
+
+3. **Focused Exploration**
+   - Inner systems: planets, moons, belts
+   - Stellar systems: highlight stars / components
+   - Deep-space: special objects (e.g., Sagittarius A\*)
+
 4. **Return to Galaxy**
-   - Animated exit with spatial scaling
+   - Cinematic exit with spatial scaling
 
 ---
 
