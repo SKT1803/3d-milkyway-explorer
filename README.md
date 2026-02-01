@@ -200,6 +200,32 @@ npm run dev
       <sub>Solar System — Sun distant view</sub>
     </td>
   </tr>
+  
+ <tr>
+    <td align="center">
+      <img src="./images/23.webp" width="480" alt="Sagittarius A* black hole region" />
+      <br />
+      <sub>Sagittarius A* — Supermassive black hole region focus</sub>
+    </td>
+    <td align="center">
+      <img src="./images/24.webp" width="480" alt="Kepler-22 system view" />
+      <br />
+      <sub>Kepler-22 — Exoplanet system destination view</sub>
+    </td>
+  </tr>
+
+  <tr>
+    <td align="center">
+      <img src="./images/25.webp" width="480" alt="Voyager 3D model in space" />
+      <br />
+      <sub>Voyager Probe — Detailed 3D model exploration</sub>
+    </td>
+    <td align="center">
+      <img src="./images/26.webp" width="480" alt="International Space Station 3D model" />
+      <br />
+      <sub>International Space Station (ISS) — Orbital 3D model view</sub>
+    </td>
+  </tr>
 
   <tr>
     <td align="center">
