@@ -17,6 +17,23 @@ export const CUSTOM_MODELS = [
   },
 
   {
+    id: "alien",
+    name: "Xenomorph",
+    type: "free",
+    url: "/models/alien.glb",
+
+    position: [2999.68, 999.94, -90.22],
+    rotation: [0, 0, 0],
+    scale: 0.001,
+
+    showLabel: false,
+    labelOffset: [0, 0.2, 0],
+    labelScale: 0.2,
+
+    focusRadius: 1.5,
+  },
+
+  {
     id: "newHorizons",
     name: "New Horizons",
     type: "free", // "free" | "orbit"
