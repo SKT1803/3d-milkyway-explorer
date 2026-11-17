@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 export function SpaceInfoPanel({
   mode,
   focus,
@@ -31,32 +33,46 @@ export function SpaceInfoPanel({
   onResetKepler22View,
   onSetFocusVega,
   onResetVegaView,
+  onStartGuidedTour,
+  isTourActive = false,
+  canStartGuidedTour = false,
 }) {
   const inGalaxy = mode === "galaxy";
   const inSolarSystem = mode === "inner" && activeInnerSpace === "sun";
   const inSiriusSystem = mode === "inner" && activeInnerSpace === "sirius";
   const inAlphaSystem =
     mode === "inner" && activeInnerSpace === "alphaCentauri";
+
   const inBetelgeuseSystem =
     mode === "inner" && activeInnerSpace === "betelgeuse";
+
   const inNaosSystem = mode === "inner" && activeInnerSpace === "naos";
   const inAntaresSystem = mode === "inner" && activeInnerSpace === "antares";
   const inCapellaSystem = mode === "inner" && activeInnerSpace === "capella";
   const inCastorSystem = mode === "inner" && activeInnerSpace === "castor";
   const inSagittariusSystem =
     mode === "inner" && activeInnerSpace === "sagittarius";
+
   const inKepler22System = mode === "inner" && activeInnerSpace === "kepler22";
   const inVegaSystem = mode === "inner" && activeInnerSpace === "vega";
 
+  // 1) Planet etrafında olanlar (LOCAL / ORBITERS)
+  // Şimdilik sadece Earth çevresi
   const freeSpaceSolarOrbiters = {
     Earth: ["ISS", "Hubble"],
     // Mars: ["..."],
     // Jupiter: ["..."],
   };
 
+  // Planet’e bağlı olmayanlar (FREE SPACE / PROBES)
+  // Solar System içindeyken ana listelerin altına gelecek
   const freeSpaceSolarProbes = ["Voyager 1", "New Horizons"];
+
+  // Interstellar Space ekranında göstereceklerin (şimdilik aynı)
   const freeSpaceInterstellar = ["Voyager 1", "New Horizons"];
 
+  // “Earth system” içine ISS’i de dahil ediyoruz
+  // çünkü ISS focus olunca sağdaki “Around Earth” panelini görmek istiyorsun
   const inEarthSystem =
     focusedPlanet === "Earth" ||
     focusedPlanet === "Moon" ||
@@ -188,7 +204,11 @@ export function SpaceInfoPanel({
   return (
     <div className="absolute top-4 left-4 z-30 pointer-events-none">
       <div className="flex gap-3 items-start">
-        <div className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[304px] text-[1rem]">
+        {/* MAIN PANEL */}
+        <div
+          className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[302px] text-[1rem]"
+          style={isTourActive ? { pointerEvents: "none" } : undefined}
+        >
           {/* Location */}
           <div className="text-white text-2xl font-semibold mb-1 leading-snug">
             <span className="block text-[0.9rem] uppercase tracking-[0.16em] text-gray-400">
@@ -453,6 +473,7 @@ export function SpaceInfoPanel({
                         )}
                       </>
                     )}
+
                     {inCastorSystem && (
                       <>
                         {focusedPlanet === "Castor Aa" && (
@@ -557,6 +578,7 @@ export function SpaceInfoPanel({
                     )}
 
                     {/* Vega System */}
+
                     {inVegaSystem && (
                       <>
                         {focusedPlanet === "Vega" &&
@@ -720,6 +742,17 @@ export function SpaceInfoPanel({
             )}
           </div>
 
+          {inGalaxy && (
+            <button
+              type="button"
+              className="mb-3 w-full rounded border border-white/30 bg-white/10 px-3 py-2 text-base font-medium text-white transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+              onClick={onStartGuidedTour}
+              disabled={!canStartGuidedTour || isTourActive}
+            >
+              ▶ Start Guided Tour
+            </button>
+          )}
+
           <div className="space-y-2 space-scroll max-h-[58vh] overflow-y-auto pr-2">
             {inGalaxy && (
               <>
@@ -743,11 +776,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                          ${
-                            focus === "sagittarius"
-                              ? "bg-purple-500/30 border-purple-400 text-white"
-                              : "bg-black/40 border-white/20 text-gray-300"
-                          }`}
+    ${
+      focus === "sagittarius"
+        ? "bg-purple-500/30 border-purple-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusSagittarius}
                     disabled={isWarping}
                   >
@@ -769,11 +802,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                          ${
-                            focus === "kepler22"
-                              ? "bg-emerald-500/30 border-emerald-400 text-white"
-                              : "bg-black/40 border-white/20 text-gray-300"
-                          }`}
+    ${
+      focus === "kepler22"
+        ? "bg-emerald-500/30 border-emerald-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusKepler22}
                     disabled={isWarping}
                   >
@@ -808,11 +841,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                          ${
-                            focus === "vega"
-                              ? "bg-indigo-500/30 border-indigo-400 text-white"
-                              : "bg-black/40 border-white/20 text-gray-300"
-                          }`}
+    ${
+      focus === "vega"
+        ? "bg-indigo-500/30 border-indigo-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusVega}
                     disabled={isWarping}
                   >
@@ -821,11 +854,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                      ${
-                        focus === "betelgeuse"
-                          ? "bg-rose-500/30 border-rose-400 text-white"
-                          : "bg-black/40 border-white/20 text-gray-300"
-                      }`}
+    ${
+      focus === "betelgeuse"
+        ? "bg-rose-500/30 border-rose-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusBetelgeuse}
                     disabled={isWarping}
                   >
@@ -834,11 +867,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                                ${
-                                  focus === "naos"
-                                    ? "bg-cyan-500/30 border-cyan-400 text-white"
-                                    : "bg-black/40 border-white/20 text-gray-300"
-                                }`}
+    ${
+      focus === "naos"
+        ? "bg-cyan-500/30 border-cyan-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusNaos}
                     disabled={isWarping}
                   >
@@ -847,11 +880,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                            ${
-                              focus === "antares"
-                                ? "bg-red-500/30 border-red-400 text-white"
-                                : "bg-black/40 border-white/20 text-gray-300"
-                            }`}
+    ${
+      focus === "antares"
+        ? "bg-red-500/30 border-red-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusAntares}
                     disabled={isWarping}
                   >
@@ -860,11 +893,11 @@ export function SpaceInfoPanel({
 
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                      ${
-                        focus === "capella"
-                          ? "bg-amber-500/30 border-amber-400 text-white"
-                          : "bg-black/40 border-white/20 text-gray-300"
-                      }`}
+    ${
+      focus === "capella"
+        ? "bg-amber-500/30 border-amber-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusCapella}
                     disabled={isWarping}
                   >
@@ -872,11 +905,11 @@ export function SpaceInfoPanel({
                   </button>
                   <button
                     className={`w-full px-3 py-1.5 rounded text-base border transition-all
-                      ${
-                        focus === "castor"
-                          ? "bg-blue-500/30 border-blue-400 text-white"
-                          : "bg-black/40 border-white/20 text-gray-300"
-                      }`}
+    ${
+      focus === "castor"
+        ? "bg-blue-500/30 border-blue-400 text-white"
+        : "bg-black/40 border-white/20 text-gray-300"
+    }`}
                     onClick={onSetFocusCastor}
                     disabled={isWarping}
                   >
@@ -1184,6 +1217,7 @@ export function SpaceInfoPanel({
           </div>
         </div>
 
+        {/* RIGHT SIDE: LOCAL SYSTEM PANELS */}
         {inSolarSystem &&
           (inEarthSystem ||
             inMarsSystem ||
@@ -1199,6 +1233,7 @@ export function SpaceInfoPanel({
                     Around{" "}
                     <span className="text-gray-100 font-semibold">Earth</span>
                   </div>
+
                   {/* Moon */}
                   <div className="mb-2">
                     <div className="text-gray-400 text-[0.72rem] uppercase tracking-wide mb-1">
