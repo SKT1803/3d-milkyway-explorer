@@ -198,7 +198,7 @@ const TOUR_STOPS = {
   },
 };
 
-function GuidedTourGalaxySceneReady({ visible, onReady }) {
+function SceneCommitReady({ visible, onReady }) {
   useLayoutEffect(() => {
     if (visible) onReady();
   }, [visible, onReady]);
@@ -328,7 +328,7 @@ export default function App() {
     target: [0, 0, 0],
   };
 
-  useLayoutEffect(() => {
+  const finishGalaxyToInnerHandoff = useCallback(() => {
     if (!warpTarget || !cameraRef.current) return;
 
     if (warpTarget === WARP_TARGET.TO_SUN) {
@@ -1836,7 +1836,18 @@ export default function App() {
 
           {/* R3F scene-commit barrier: prevents a 1-frame old-star close-up
               during an automated inner-system -> galaxy camera reset. */}
-          <GuidedTourGalaxySceneReady
+          {/* <GuidedTourGalaxySceneReady
+            visible={showGalaxy && activeInnerSpace === null}
+            onReady={finishGalaxyTourHandoff}
+          /> */}
+          {/* Galaxy → Inner Space: eski portallar kaldırıldıktan sonra gir */}
+          <SceneCommitReady
+            visible={mode === MODE.GALAXY && warpTarget !== null}
+            onReady={finishGalaxyToInnerHandoff}
+          />
+
+          {/* Inner Space → Galaxy: eski sistem kaldırıldıktan sonra çık */}
+          <SceneCommitReady
             visible={showGalaxy && activeInnerSpace === null}
             onReady={finishGalaxyTourHandoff}
           />

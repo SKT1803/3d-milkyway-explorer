@@ -1,3 +1,4 @@
+import { useState } from "react";
 import * as THREE from "three";
 
 export function SpaceInfoPanel({
@@ -37,6 +38,7 @@ export function SpaceInfoPanel({
   isTourActive = false,
   canStartGuidedTour = false,
 }) {
+  const [panelOpen, setPanelOpen] = useState(true);
   const inGalaxy = mode === "galaxy";
   const inSolarSystem = mode === "inner" && activeInnerSpace === "sun";
   const inSiriusSystem = mode === "inner" && activeInnerSpace === "sirius";
@@ -203,14 +205,33 @@ export function SpaceInfoPanel({
 
   return (
     <div className="absolute top-4 left-4 z-30 pointer-events-none">
-      <div className="flex gap-3 items-start">
+      {!panelOpen && (
+        <button
+          type="button"
+          className="pointer-events-auto rounded-xl border border-white/20 bg-black/80 px-4 py-2.5 text-sm font-medium text-white shadow-xl backdrop-blur-sm"
+          onClick={() => setPanelOpen(true)}
+        >
+          ☰ Explore
+        </button>
+      )}
+
+      <div className={`${panelOpen ? "flex" : "hidden"} gap-3 items-start`}>
         {/* MAIN PANEL */}
         <div
-          className="bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[302px] text-[1rem]"
+          className="relative bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[302px] text-[1rem]"
           style={isTourActive ? { pointerEvents: "none" } : undefined}
         >
+          <button
+            type="button"
+            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-md border border-white/20 text-lg text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+            onClick={() => setPanelOpen(false)}
+            aria-label="Collapse Explore panel"
+            title="Collapse panel"
+          >
+            −
+          </button>
           {/* Location */}
-          <div className="text-white text-2xl font-semibold mb-1 leading-snug">
+          <div className="text-white text-2xl font-semibold mb-1 leading-snug pr-8">
             <span className="block text-[0.9rem] uppercase tracking-[0.16em] text-gray-400">
               Current location
             </span>
