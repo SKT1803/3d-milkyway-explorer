@@ -35,6 +35,8 @@ export function SpaceInfoPanel({
   onSetFocusVega,
   onResetVegaView,
   onStartGuidedTour,
+  onOpenCompare,
+  canOpenCompare = false,
   isTourActive = false,
   canStartGuidedTour = false,
 }) {
@@ -218,7 +220,7 @@ export function SpaceInfoPanel({
       <div className={`${panelOpen ? "flex" : "hidden"} gap-3 items-start`}>
         {/* MAIN PANEL */}
         <div
-          className="relative bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[302px] text-[1rem]"
+          className="relative bg-black/70 backdrop-blur-sm border border-white/20 rounded-xl p-3 shadow-xl pointer-events-auto w-[260px] sm:w-[302px] text-[1rem] flex flex-col max-h-[calc(100dvh-2rem)]"
           style={isTourActive ? { pointerEvents: "none" } : undefined}
         >
           <button
@@ -265,7 +267,7 @@ export function SpaceInfoPanel({
           </div>
 
           {/* Distance / info */}
-          <div className="text-gray-300 text-base mb-3 leading-snug min-h-[72px]">
+          <div className="text-gray-300 text-base mb-3 leading-snug min-h-[72px] shrink-0">
             {inGalaxy && (
               <>
                 <div className="font-medium text-lg">Distance</div>
@@ -763,6 +765,16 @@ export function SpaceInfoPanel({
             )}
           </div>
 
+          {/* COMPARE MODE */}
+          <button
+            type="button"
+            onClick={onOpenCompare}
+            disabled={!canOpenCompare}
+            className="mb-3 w-full rounded border border-white/30 bg-white/10 px-3 py-2 text-base font-medium text-white transition-colors hover:bg-white/20 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ⇄ Compare Celestial Bodies
+          </button>
+
           {inGalaxy && (
             <button
               type="button"
@@ -774,7 +786,18 @@ export function SpaceInfoPanel({
             </button>
           )}
 
-          <div className="space-y-2 space-scroll max-h-[58vh] overflow-y-auto pr-2">
+          {mode === "inner" && (
+            <button
+              type="button"
+              className="mb-3 w-full rounded border border-blue-400/50 bg-blue-500/20 px-3 py-2 text-base font-medium text-blue-200 transition-colors hover:bg-blue-500/30 disabled:opacity-40"
+              onClick={onBackToMilkyWay}
+              disabled={isWarping || isBackAnimating}
+            >
+              ← Back to Milky Way
+            </button>
+          )}
+
+          <div className="min-h-0 flex-1 space-y-2 space-scroll overflow-y-auto pr-2">
             {inGalaxy && (
               <>
                 <div className="text-gray-400 text-[0.9rem] mb-1">
@@ -942,14 +965,6 @@ export function SpaceInfoPanel({
 
             {mode === "inner" && (
               <>
-                <button
-                  className="w-full px-3 py-1.5 rounded text-base border border-blue-400/50 bg-blue-500/20 text-blue-200"
-                  onClick={onBackToMilkyWay}
-                  disabled={isWarping || isBackAnimating}
-                >
-                  ← Back to Milky Way
-                </button>
-
                 {inSolarSystem && (
                   <>
                     <div className="text-gray-400 text-[0.9rem] mb-1">

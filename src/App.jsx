@@ -11,7 +11,7 @@ import {
 import * as THREE from "three";
 
 import { LoadingScreen } from "./components/loading-screen";
-
+import { CompareView } from "./components/compare/compare-view";
 import { MilkyWay } from "./components/milky-way";
 import { CameraControls } from "./components/camera-controls";
 import { InnerSpace } from "./components/inner-space";
@@ -219,6 +219,8 @@ export default function App() {
   });
 
   const [isMilkyWayReady, setIsMilkyWayReady] = useState(false);
+
+  const [compareOpen, setCompareOpen] = useState(false);
 
   const [mode, setMode] = useState(MODE.GALAXY);
   const [focus, setFocus] = useState(FOCUS.MILKY_WAY);
@@ -1538,6 +1540,13 @@ export default function App() {
           onResetKepler22View={resetKepler22View}
           onResetVegaView={resetVegaView}
           onStartGuidedTour={startGuidedTour}
+          onOpenCompare={() => {
+            cameraRef.current?.cancelAnimation?.();
+            setCompareOpen(true);
+          }}
+          canOpenCompare={
+            isMilkyWayReady && !isWarping && !isBackAnimating && !tourActive
+          }
           isTourActive={tourActive}
           canStartGuidedTour={isMilkyWayReady && !isWarping && !isBackAnimating}
         />
@@ -1578,6 +1587,7 @@ export default function App() {
           far: 8000,
         }}
         gl={{ antialias: true }}
+        frameloop={compareOpen ? "never" : "always"}
       >
         <CameraControls
           ref={cameraRef}
@@ -1853,6 +1863,8 @@ export default function App() {
           />
         </Suspense>
       </Canvas>
+
+      {compareOpen && <CompareView onClose={() => setCompareOpen(false)} />}
 
       {tourActive && (
         <div
